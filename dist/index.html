@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="fi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#17324d">
+    <meta name="description" content="Käytännönläheinen johdatus Progressive Web App -sovelluksiin: idea, historia, elinkaari, mahdollisuudet, rajoitukset ja toteutusohje.">
+    <meta name="author" content="Simo Sirén">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="icon" type="image/svg+xml" href="./icons/pwa-icon.svg">
+    <link rel="apple-touch-icon" href="./icons/pwa-icon-192.png">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Progressive Web App tutuksi</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#sisalto">Siirry sisältöön</a>
+
+    <header class="site-header">
+      <a class="site-name" href="#alku" aria-label="Progressive Web App tutuksi, sivun alku">
+        <svg aria-hidden="true" viewBox="0 0 40 40" width="34" height="34">
+          <rect x="2" y="2" width="36" height="36" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M11 27V13h7.3c3.2 0 5.2 1.8 5.2 4.7 0 3-2 4.8-5.2 4.8h-3.4V27H11Zm3.9-8h3c1.2 0 1.8-.5 1.8-1.4 0-.9-.6-1.4-1.8-1.4h-3V19Zm9.4 8 4.3-14h3.7l-4.2 14h-3.8Z" fill="currentColor"/>
+        </svg>
+        <span>Progressive Web App tutuksi</span>
+      </a>
+      <div class="header-actions">
+        <span class="connection" id="connection-status" aria-live="polite">
+          <span class="connection-dot" aria-hidden="true"></span>
+          <span>Yhteyttä tarkistetaan</span>
+        </span>
+        <button class="install-button" id="install-button" type="button" hidden>Asenna sivu</button>
+      </div>
+    </header>
+
+    <div class="page-shell" id="alku">
+      <aside class="side-nav" aria-label="Sivun sisällysluettelo">
+        <p class="side-nav-label">Sisällys</p>
+        <nav>
+          <a href="#mika">Mikä PWA on?</a>
+          <a href="#historia">Historia</a>
+          <a href="#elinkaari">Elinkaari</a>
+          <a href="#mahdollisuudet">Mahdollisuudet</a>
+          <a href="#rajoitukset">Rajoitukset</a>
+          <a href="#toteutus">Toteutusohje</a>
+          <a href="#tarkistuslista">Tarkistuslista</a>
+        </nav>
+        <p class="side-note">Tämä sivu on itsessään asennettava PWA ja toimii myös ilman verkkoyhteyttä ensimmäisen käynnin jälkeen.</p>
+      </aside>
+
+      <main id="sisalto">
+        <section class="intro" aria-labelledby="page-title">
+          <div class="intro-copy">
+            <p class="eyebrow">Verkkosovelluksen käytännön opas</p>
+            <h1 id="page-title">Progressive Web App tutuksi</h1>
+            <p class="lead">PWA on verkkosovellus, joka voidaan asentaa laitteelle, avata omassa ikkunassaan ja rakentaa toimimaan myös heikolla tai puuttuvalla verkkoyhteydellä. Se on silti pohjimmiltaan verkkosivu: linkitettävä, päivitettävä ja selaimella saavutettava.</p>
+            <p class="byline">Tekijä <strong>Simo Sirén</strong></p>
+          </div>
+
+          <figure class="anatomy" aria-labelledby="anatomy-title">
+            <figcaption id="anatomy-title">PWA:n perusrakenne</figcaption>
+            <div class="anatomy-row">
+              <span class="anatomy-label">Käyttöliittymä</span>
+              <span class="anatomy-detail">HTML · CSS · JavaScript</span>
+            </div>
+            <div class="anatomy-row accent-row">
+              <span class="anatomy-label">Sovelluksen tiedot</span>
+              <span class="anatomy-detail">Web App Manifest</span>
+            </div>
+            <div class="anatomy-row dark-row">
+              <span class="anatomy-label">Verkon välissä</span>
+              <span class="anatomy-detail">Service worker · välimuisti</span>
+            </div>
+            <div class="anatomy-foot">
+              <span>Selain</span>
+              <span aria-hidden="true">→</span>
+              <span>Käyttöjärjestelmä</span>
+            </div>
+          </figure>
+        </section>
+
+        <section class="content-section" id="mika" aria-labelledby="mika-title">
+          <div class="section-number" aria-hidden="true">01</div>
+          <div class="section-body">
+            <p class="section-kicker">Perusajatus</p>
+            <h2 id="mika-title">Mikä tekee verkkosivusta PWA:n?</h2>
+            <p>PWA ei ole oma ohjelmointikielensä eikä yksittäinen kirjasto. Sillä tarkoitetaan verkkosovellusta, johon lisätään selaimen tarjoamia sovellusmaisia ominaisuuksia. Ominaisuudet otetaan käyttöön asteittain: jos selain ei tue jotakin toimintoa, perussivuston pitää silti toimia.</p>
+
+            <div class="definition">
+              <p><strong>Progressive</strong> viittaa asteittaiseen parantamiseen. Kokemus mukautuu selaimen ja laitteen kykyihin sen sijaan, että sivu vaatisi jokaiselta käyttäjältä täsmälleen saman ympäristön.</p>
+            </div>
+
+            <div class="fact-grid">
+              <article>
+                <h3>Manifesti kuvailee sovelluksen</h3>
+                <p>Nimi, kuvakkeet, aloitusosoite, värit ja avautumistapa kerrotaan selaimelle JSON-muotoisessa manifestitiedostossa.</p>
+              </article>
+              <article>
+                <h3>Service worker hoitaa taustatyötä</h3>
+                <p>Selaimesta erillinen JavaScript-prosessi voi siepata verkkopyyntöjä, käyttää välimuistia ja vastaanottaa esimerkiksi push-viestejä.</p>
+              </article>
+              <article>
+                <h3>HTTPS tekee mallista turvallisen</h3>
+                <p>Service worker saa paljon valtaa verkkopyyntöihin, joten se toimii tuotannossa vain suojatussa HTTPS-yhteydessä. Paikallinen localhost on kehityspoikkeus.</p>
+              </article>
+              <article>
+                <h3>Asennus ei ole pakollinen käyttötapa</h3>
+                <p>Sama sovellus toimii tavallisessa selaimen välilehdessä. Käyttäjä voi asentaa sen, jos selain ja käyttöjärjestelmä tarjoavat asennuksen.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section" id="historia" aria-labelledby="historia-title">
+          <div class="section-number" aria-hidden="true">02</div>
+          <div class="section-body">
+            <p class="section-kicker">Tausta</p>
+            <h2 id="historia-title">Ajatus syntyi ennen nimeä</h2>
+            <p>Asennettavan verkkosovelluksen historia ei ala yhdestä julkaisusta. Se kasvoi vaiheittain selainten, mobiililaitteiden ja avoimien web-standardien kehittyessä.</p>
+
+            <ol class="timeline">
+              <li>
+                <time datetime="2007">2007</time>
+                <div><h3>iPhone ja kotinäytön web-sovellukset</h3><p>Ensimmäisen iPhonen yhteydessä Apple korosti selaimessa toimivia sovelluksia. Sivustoja pystyi lisäämään kotinäytölle, mutta nykyinen service worker -pohjainen offline-malli puuttui.</p></div>
+              </li>
+              <li>
+                <time datetime="2014">2014</time>
+                <div><h3>Service worker alkoi muuttaa verkkomallia</h3><p>Selain sai ohjelmoitavan kerroksen sovelluksen ja verkon väliin. Tämä mahdollisti hallitun välimuistin ja verkkoyhteydestä riippumattoman käynnistyksen.</p></div>
+              </li>
+              <li>
+                <time datetime="2015">2015</time>
+                <div><h3>PWA sai nimensä</h3><p>Suunnittelija Frances Berriman ja Chrome-insinööri Alex Russell nimesivät mallin Progressive Web Appiksi. Ajatus yhdisti webin saavutettavuuden ja linkitettävyyden asennettavan sovelluksen kokemukseen.</p></div>
+              </li>
+              <li>
+                <time datetime="2018">2018</time>
+                <div><h3>Tuki levisi suuriin selainmoottoreihin</h3><p>Service worker -tuki oli saatavilla Chromessa, Firefoxissa, Edgessä ja Safarissa. Toteutusten yksityiskohdissa oli silti eroja.</p></div>
+              </li>
+              <li>
+                <time datetime="2023">2023</time>
+                <div><h3>iOS:n kotinäyttösovellukset saivat Web Pushin</h3><p>iOS ja iPadOS 16.4 toivat standardiin perustuvat push-ilmoitukset kotinäytölle lisättyihin web-sovelluksiin sekä tuen kolmansien osapuolten selainten Lisää kotinäytölle -toiminnolle.</p></div>
+              </li>
+              <li>
+                <time datetime="2026">Nyt</time>
+                <div><h3>PWA on käytännön vaihtoehto, ei yleisratkaisu</h3><p>Asennus, offline-käyttö ja monet laiterajapinnat toimivat laajasti. Ominaisuuksien saatavuus riippuu kuitenkin edelleen selaimesta, käyttöjärjestelmästä ja sovelluksen asennustavasta.</p></div>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="content-section" id="elinkaari" aria-labelledby="elinkaari-title">
+          <div class="section-number" aria-hidden="true">03</div>
+          <div class="section-body">
+            <p class="section-kicker">Toiminta käytössä</p>
+            <h2 id="elinkaari-title">PWA:n elinkaari kahdella tasolla</h2>
+            <p>Käyttäjä näkee sivun, mahdollisen asennuksen ja päivitykset. Taustalla service worker käy läpi oman tarkasti määritellyn elinkaarensa.</p>
+
+            <div class="lifecycle">
+              <div class="lifecycle-track" aria-label="Käyttäjän näkökulma">
+                <h3>Käyttäjän näkökulma</h3>
+                <ol>
+                  <li><span>1</span><div><strong>Löytäminen</strong><small>Linkki, haku tai jaettu osoite</small></div></li>
+                  <li><span>2</span><div><strong>Ensimmäinen käyttö</strong><small>Sivu toimii heti selaimessa</small></div></li>
+                  <li><span>3</span><div><strong>Asennus</strong><small>Selain tai käyttöjärjestelmä tarjoaa asennuksen</small></div></li>
+                  <li><span>4</span><div><strong>Palaaminen</strong><small>Kuvake avaa sovelluksen omaan ikkunaan</small></div></li>
+                  <li><span>5</span><div><strong>Päivitys</strong><small>Uusi versio latautuu verkkoversion mukana</small></div></li>
+                </ol>
+              </div>
+              <div class="lifecycle-track technical" aria-label="Service workerin näkökulma">
+                <h3>Service workerin näkökulma</h3>
+                <ol>
+                  <li><span>1</span><div><strong>Rekisteröinti</strong><small>Sivu pyytää selainta lataamaan workerin</small></div></li>
+                  <li><span>2</span><div><strong>Install</strong><small>Tarvittavat perustiedostot tallennetaan välimuistiin</small></div></li>
+                  <li><span>3</span><div><strong>Activate</strong><small>Vanhat välimuistit voidaan poistaa</small></div></li>
+                  <li><span>4</span><div><strong>Fetch</strong><small>Worker päättää verkon ja välimuistin käytöstä</small></div></li>
+                  <li><span>5</span><div><strong>Update</strong><small>Selain havaitsee muuttuneen worker-tiedoston</small></div></li>
+                </ol>
+              </div>
+            </div>
+
+            <aside class="note"><strong>Hyvä tietää:</strong> uusi service worker voi jäädä odottamaan, kunnes vanhaa versiota käyttävät välilehdet suljetaan. Päivityksestä kannattaa ilmoittaa käyttäjälle, jos sovelluksessa käsitellään keskeneräistä tietoa.</aside>
+          </div>
+        </section>
+
+        <section class="content-section split-section" id="mahdollisuudet" aria-labelledby="mahdollisuudet-title">
+          <div class="section-number" aria-hidden="true">04</div>
+          <div class="section-body">
+            <p class="section-kicker">Mihin se sopii?</p>
+            <h2 id="mahdollisuudet-title">Mahdollisuuksia, joilla on käytännön arvoa</h2>
+            <div class="prose-columns">
+              <div>
+                <h3>Yksi julkaisu, monta laitetta</h3>
+                <p>Sama verkkoversio palvelee puhelinta, tablettia ja työpöytää. Päivitys julkaistaan palvelimelle, eikä jokaista pientä korjausta tarvitse kierrättää sovelluskaupan tarkastuksen kautta.</p>
+                <h3>Toiminta katkonaisessa verkossa</h3>
+                <p>Välimuistiin voidaan tallentaa käyttöliittymä, aiemmin avattu sisältö tai kokonainen paikallinen työskentelytila. Verkon palattua muutokset voidaan synkronoida palvelimelle.</p>
+                <h3>Asennettava käyttökokemus</h3>
+                <p>Kuvake, erillinen ikkuna ja käyttöjärjestelmän sovellusluettelo tekevät usein käytetystä palvelusta helpommin saavutettavan ilman natiivisovelluksen pakollisuutta.</p>
+              </div>
+              <div>
+                <h3>Webin jakelutapa säilyy</h3>
+                <p>Sovellukseen voi tulla linkillä, eikä kokeileminen vaadi ensin kauppaa, latausta ja tilaa vievää asennuspakettia. Hakukoneet voivat indeksoida julkista sisältöä.</p>
+                <h3>Laitteen ominaisuuksia harkiten</h3>
+                <p>Selaimen tuesta riippuen sovellus voi käyttää ilmoituksia, kameraa, sijaintia, jakamista, leikepöytää ja tiedostoja. Oikeudet pyydetään silloin, kun käyttäjä ymmärtää niiden tarpeen.</p>
+                <h3>Sopivia kohteita</h3>
+                <p>Varaus- ja asiointipalvelut, uutis- ja sisältösovellukset, kenttätyön lomakkeet, tapahtumaoppaat sekä kevyet tuottavuustyökalut hyötyvät usein PWA-mallista.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section" id="rajoitukset" aria-labelledby="rajoitukset-title">
+          <div class="section-number" aria-hidden="true">05</div>
+          <div class="section-body">
+            <p class="section-kicker">Reunaehdot</p>
+            <h2 id="rajoitukset-title">Missä PWA ei korvaa natiivisovellusta?</h2>
+            <p>Tekninen mahdollisuus ei vielä tarkoita, että ominaisuus toimii samalla tavalla kaikkialla. Selain on sekä PWA:n vahvuus että sen raja.</p>
+
+            <div class="limits-list">
+              <article><span>01</span><div><h3>Rajapintojen tuki vaihtelee</h3><p>Kaikki laiteominaisuudet eivät ole saatavilla kaikissa selaimissa. Esimerkiksi taustatoiminnot, tiedostojen käsittely ja Bluetooth-yhteydet voivat toimia eri tavoin tai puuttua kokonaan.</p></div></article>
+              <article><span>02</span><div><h3>Asentaminen ei ole yhdenmukaista</h3><p>Asennuspainikkeen paikka ja ehdot riippuvat selaimesta. iPhonessa käyttäjä lisää sovelluksen yleensä jakovalikon kautta kotinäytölle; työpöytäselainten tuki vaihtelee.</p></div></article>
+              <article><span>03</span><div><h3>Offline vaatii tietoisen suunnitelman</h3><p>Välimuisti ei itsestään ratkaise kirjautumista, muuttuvan tiedon ajantasaisuutta tai ristiriitoja. Vanhentunut tieto voi olla pahempi kuin selkeä ilmoitus verkkoyhteyden tarpeesta.</p></div></article>
+              <article><span>04</span><div><h3>Raskas laiteintegraatio suosii usein natiivia</h3><p>Jatkuva taustaseuranta, tiukka Bluetooth- tai anturiyhteys, vaativa grafiikka ja syvä käyttöjärjestelmäintegraatio voivat olla luotettavampia natiivisovelluksessa.</p></div></article>
+              <article><span>05</span><div><h3>Sovelluskauppanäkyvyys ei tule automaattisesti</h3><p>Verkosta asennettava PWA ei automaattisesti näy sovelluskaupoissa. Kauppajulkaisu on mahdollinen joillakin alustoilla, mutta sillä on omat paketointi- ja hyväksymisvaatimuksensa.</p></div></article>
+            </div>
+
+            <div class="decision-box">
+              <h3>Yksinkertainen valintaperuste</h3>
+              <p>Valitse PWA, kun linkillä saavutettava ja usealla laitteella toimiva palvelu on tärkeämpi kuin täydellinen pääsy yhden käyttöjärjestelmän kaikkiin ominaisuuksiin. Valitse natiivi, kun laitteen syvä integraatio on tuotteen ydin. Moni palvelu käyttää myös molempia.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section guide-section" id="toteutus" aria-labelledby="toteutus-title">
+          <div class="section-number" aria-hidden="true">06</div>
+          <div class="section-body">
+            <p class="section-kicker">Rakennusohje</p>
+            <h2 id="toteutus-title">Näin teet verkkosivusta PWA:n</h2>
+            <p>Alla on pienin järkevä toteutus ilman sovelluskehystä. Tiedostot voi liittää myös React-, Vue- tai muuhun verkkosovellukseen samalla periaatteella.</p>
+
+            <ol class="steps">
+              <li>
+                <div class="step-heading"><span>1</span><div><h3>Varmista toimiva perussivu ja HTTPS</h3><p>Tee ensin responsiivinen ja saavutettava verkkosovellus. PWA-ominaisuudet parantavat sitä; ne eivät korjaa huonoa peruskokemusta.</p></div></div>
+              </li>
+              <li>
+                <div class="step-heading"><span>2</span><div><h3>Lisää web app manifest</h3><p>Tallenna esimerkiksi <code>manifest.webmanifest</code> ja viittaa siihen jokaisen sivun <code>&lt;head&gt;</code>-osassa.</p></div></div>
+                <div class="code-block">
+                  <div class="code-header"><span>manifest.webmanifest</span><button class="copy-button" type="button">Kopioi</button></div>
+                  <pre><code>{
+  "name": "Oma sovellus",
+  "short_name": "Sovellus",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#17324d",
+  "background_color": "#f4f0e8",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}</code></pre>
+                </div>
+              </li>
+              <li>
+                <div class="step-heading"><span>3</span><div><h3>Kirjoita service worker</h3><p>Esimerkki tallentaa sovelluksen rungon asennusvaiheessa ja käyttää verkkopyynnöissä ensin verkkoa, sitten välimuistia.</p></div></div>
+                <div class="code-block">
+                  <div class="code-header"><span>sw.js</span><button class="copy-button" type="button">Kopioi</button></div>
+                  <pre><code>const CACHE = "oma-sovellus-v1";
+const FILES = ["./", "./styles.css", "./app.js"];
+
+self.addEventListener("install", event =&gt; {
+  event.waitUntil(caches.open(CACHE).then(cache =&gt; cache.addAll(FILES)));
+});
+
+self.addEventListener("fetch", event =&gt; {
+  event.respondWith(
+    fetch(event.request).catch(() =&gt; caches.match(event.request))
+  );
+});</code></pre>
+                </div>
+              </li>
+              <li>
+                <div class="step-heading"><span>4</span><div><h3>Rekisteröi worker selaimessa</h3><p>Rekisteröinti tehdään sivun JavaScriptissä. Tuen tarkistus estää virheen vanhemmissa selaimissa.</p></div></div>
+                <div class="code-block">
+                  <div class="code-header"><span>app.js</span><button class="copy-button" type="button">Kopioi</button></div>
+                  <pre><code>if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () =&gt; {
+    navigator.serviceWorker.register("./sw.js");
+  });
+}</code></pre>
+                </div>
+              </li>
+              <li>
+                <div class="step-heading"><span>5</span><div><h3>Suunnittele välimuististrategia sisällön mukaan</h3><p>Käyttöliittymän staattiset tiedostot voi hakea välimuistista ensin. Ajantasainen data kannattaa hakea verkosta ensin tai päivittää taustalla. Älä tallenna arkaluonteista käyttäjätietoa välimuistiin ilman harkintaa.</p></div></div>
+              </li>
+              <li>
+                <div class="step-heading"><span>6</span><div><h3>Testaa asennus, päivitys ja verkkokatko</h3><p>Aja sivu localhostissa tai HTTPS-palvelimella. Tarkista selaimen kehittäjätyökaluista manifesti ja service worker, kokeile Offline-tilaa ja testaa oikealla puhelimella.</p></div></div>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="content-section" id="tarkistuslista" aria-labelledby="tarkistuslista-title">
+          <div class="section-number" aria-hidden="true">07</div>
+          <div class="section-body">
+            <p class="section-kicker">Ennen julkaisua</p>
+            <h2 id="tarkistuslista-title">Tarkistuslista</h2>
+            <div class="checklist" role="list">
+              <label><input type="checkbox"><span>Perussivu toimii ilman PWA-ominaisuuksia</span></label>
+              <label><input type="checkbox"><span>Sivusto tarjotaan HTTPS-yhteydellä</span></label>
+              <label><input type="checkbox"><span>Manifestissa on nimi, aloitusosoite, näyttötila ja 192/512 px kuvakkeet</span></label>
+              <label><input type="checkbox"><span>Service workerin laajuus eli scope on tarkoituksenmukainen</span></label>
+              <label><input type="checkbox"><span>Offline-tilassa näkyy hyödyllinen näkymä, ei selaimen virhesivu</span></label>
+              <label><input type="checkbox"><span>Välimuistin versiointi ja vanhojen välimuistien poisto on suunniteltu</span></label>
+              <label><input type="checkbox"><span>Asennus on testattu vähintään Androidilla, iOS:llä ja työpöytäselaimella</span></label>
+              <label><input type="checkbox"><span>Näppäimistö, ruudunlukija, zoomaus ja eri näyttökoot on huomioitu</span></label>
+            </div>
+            <p class="saved-note" id="checklist-status" aria-live="polite">Valinnat tallentuvat tälle laitteelle.</p>
+          </div>
+        </section>
+
+        <section class="sources" aria-labelledby="sources-title">
+          <h2 id="sources-title">Lähteet ja jatkolukeminen</h2>
+          <p>Selaintuki muuttuu ajan myötä. Tarkista tuotantoon vietävien ominaisuuksien ajantasainen yhteensopivuus ennen toteutusta.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/What_is_a_progressive_web_app">MDN: What is a progressive web app?</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Making_PWAs_installable">MDN: Making PWAs installable</a></li>
+            <li><a href="https://web.dev/learn/pwa/">web.dev: Learn PWA</a></li>
+            <li><a href="https://chromeos.dev/en/posts/pwas-past-present-future">ChromeOS.dev: PWAs — past, present, future</a></li>
+            <li><a href="https://webkit.org/blog/13878/web-push-for-web-apps-on-ios-and-ipados/">WebKit: Web Push for Web Apps on iOS and iPadOS</a></li>
+          </ul>
+        </section>
+      </main>
+    </div>
+
+    <footer>
+      <p>Progressive Web App tutuksi</p>
+      <p>Tekijä Simo Sirén · <span id="year">2026</span></p>
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "id": "./",
+  "name": "Progressive Web App tutuksi",
+  "short_name": "PWA tutuksi",
+  "description": "Käytännönläheinen opas PWA-sovellusten ideaan, historiaan, elinkaareen ja toteutukseen.",
+  "lang": "fi",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f0e8",
+  "theme_color": "#17324d",
+  "categories": ["education", "developer"],
+  "icons": [
+    {
+      "src": "./icons/pwa-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/pwa-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Toteutusohje",
+      "short_name": "Ohje",
+      "url": "./#toteutus"
+    },
+    {
+      "name": "Tarkistuslista",
+      "short_name": "Lista",
+      "url": "./#tarkistuslista"
+    }
+  ]
+}
