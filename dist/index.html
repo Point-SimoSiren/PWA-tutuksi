@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#17324d">
     <meta name="description" content="Käytännönläheinen johdatus Progressive Web App -sovelluksiin: idea, historia, elinkaari, mahdollisuudet, rajoitukset ja toteutusohje.">
     <meta name="author" content="Simo Sirén">
-    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="manifest" href="./manifest.json">
     <link rel="icon" type="image/svg+xml" href="./icons/pwa-icon.svg">
     <link rel="apple-touch-icon" href="./icons/pwa-icon-192.png">
     <link rel="stylesheet" href="./styles.css">
@@ -240,9 +240,9 @@
                 <div class="step-heading"><span>1</span><div><h3>Varmista toimiva perussivu ja HTTPS</h3><p>Tee ensin responsiivinen ja saavutettava verkkosovellus. PWA-ominaisuudet parantavat sitä; ne eivät korjaa huonoa peruskokemusta.</p></div></div>
               </li>
               <li>
-                <div class="step-heading"><span>2</span><div><h3>Lisää web app manifest</h3><p>Tallenna esimerkiksi <code>manifest.webmanifest</code> ja viittaa siihen jokaisen sivun <code>&lt;head&gt;</code>-osassa.</p></div></div>
+                <div class="step-heading"><span>2</span><div><h3>Lisää web app manifest</h3><p>Tallenna esimerkiksi <code>manifest.json</code> ja viittaa siihen jokaisen sivun <code>&lt;head&gt;</code>-osassa.</p></div></div>
                 <div class="code-block">
-                  <div class="code-header"><span>manifest.webmanifest</span><button class="copy-button" type="button">Kopioi</button></div>
+                  <div class="code-header"><span>manifest.json</span><button class="copy-button" type="button">Kopioi</button></div>
                   <pre><code>{
   "name": "Oma sovellus",
   "short_name": "Sovellus",

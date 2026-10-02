@@ -8,6 +8,7 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "prefer_related_applications": false,
   "background_color": "#f4f0e8",
   "theme_color": "#17324d",
   "categories": ["education", "developer"],

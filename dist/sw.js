@@ -1,10 +1,10 @@
-const CACHE_NAME = "pwa-tutuksi-v2";
+const CACHE_NAME = "pwa-tutuksi-v3";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
-  "./manifest.webmanifest",
+  "./manifest.json",
   "./icons/pwa-icon.svg",
   "./icons/pwa-icon-192.png",
   "./icons/pwa-icon-512.png"
